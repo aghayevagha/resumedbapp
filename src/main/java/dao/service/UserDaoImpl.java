@@ -19,13 +19,15 @@ public class UserDaoImpl extends AbstractDAO implements UserDaoInter {
             String email=rs.getString("email");
             String phone=rs.getString("phone");
             Date birthDate=rs.getDate("birthdate");
+            String profileDesc=rs.getString("profileDescription");
             int birthPlaceId=rs.getInt("birthplace_id");
             int nationalityId=rs.getInt("nationality_id");
             String birthPlaceStr=rs.getString("birthplace");
             String nationalityStr=rs.getString("nationality");
+            
             Country nationality=new Country(nationalityId,null,nationalityStr);
             Country birthPlace=new Country(birthPlaceId,birthPlaceStr,null);
-            return new User(id,name,surname,email,phone,birthDate,birthPlace,nationality);
+            return new User(id,name,surname,email,phone,profileDesc,birthDate,birthPlace,nationality);
         }
         private UserSkill getUserSkill(ResultSet rs) throws Exception{
             int id=rs.getInt("id");
@@ -61,12 +63,15 @@ public class UserDaoImpl extends AbstractDAO implements UserDaoInter {
     @Override
     public boolean updateUser(User user) {
         try (Connection c=connect();){
-            PreparedStatement statement = c.prepareStatement("update user set name=? ,surname=?,email=?,phone=? where id=?");
+            PreparedStatement statement = c.prepareStatement("update user set name=? ,surname=?,email=?,phone=?,profileDescription=?,birthdate=?,birthplace_id=? where id=?");
             statement.setString(1,user.getName());
             statement.setString(2,user.getSurname());
             statement.setString(3,user.getEmail());
             statement.setString(4,user.getPhone());
-            statement.setInt(5,user.getId());
+            statement.setString(5,user.getProfileDesc());
+            statement.setDate(6, new java.sql.Date(user.getBirthDate().getTime()));
+            statement.setInt(7,user.getBirthPlace().getId());
+            statement.setInt(9,user.getId());
             return statement.execute();
         }catch (Exception ex){
             return false;
@@ -94,7 +99,6 @@ public class UserDaoImpl extends AbstractDAO implements UserDaoInter {
             statement.execute("SELECT u.*,c.name as birthplace,n.nationality as nationality FROM resumeapp.user u left join resumeapp.country n on u.nationality_id=n.id left join resumeapp.country c on u.birthplace_id=c.id where u.id="+id);
             ResultSet rs=statement.getResultSet();
             while(rs.next()){
-
                 user=getUser(rs);
             }}
         catch (Exception ex){
@@ -106,11 +110,12 @@ public class UserDaoImpl extends AbstractDAO implements UserDaoInter {
     @Override
     public boolean addUser(User user) {
         try (Connection c=connect();){
-            PreparedStatement statement = c.prepareStatement("insert into user(name,surname,email,phone) values(?,?,?,?)") ;
+            PreparedStatement statement = c.prepareStatement("insert into user(name,surname,email,phone,profileDescription) values(?,?,?,?,?)") ;
             statement.setString(1,user.getName());
             statement.setString(2,user.getSurname());
             statement.setString(3,user.getEmail());
             statement.setString(4,user.getPhone());
+            statement.setString(5,user.getProfileDesc());
 
             return statement.execute();
         }catch (Exception ex){

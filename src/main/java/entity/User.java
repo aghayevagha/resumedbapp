@@ -1,6 +1,6 @@
 package entity;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 public class User {
@@ -9,21 +9,25 @@ public class User {
     private String surname;
     private String email;
     private String phone;
+    private String profileDesc;
     private Date birthDate;
     private Country birthPlace;
     private Country countryName;
     private List<UserSkill> skill;
-
+    public User(){
+        
+    }
     public User(int id) {
         this.id = id;
     }
 
-    public User(int id, String name, String surname, String email, String phone, Date birthDate, Country birthPlace, Country countryName) {
+    public User(int id, String name, String surname, String email,String phone,String profileDesc,  Date birthDate, Country birthPlace, Country countryName) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.phone = phone;
+        this.profileDesc=profileDesc;
         this.birthDate = birthDate;
         this.birthPlace = birthPlace;
         this.countryName = countryName;
@@ -73,6 +77,14 @@ public class User {
         this.birthDate = birthDate;
     }
 
+    public String getProfileDesc() {
+        return profileDesc;
+    }
+
+    public void setProfileDesc(String profileDesc) {
+        this.profileDesc = profileDesc;
+    }
+
     public Country getBirthPlace() {
         return birthPlace;
     }
@@ -103,15 +115,8 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", birthDate=" + birthDate +
-                ", birthPlace=" + birthPlace +
-                ", countryName=" + countryName +
-                '}';
+        return "User{" + "id=" + id + ", name=" + name + ", surname=" + surname + ", email=" + email + ", phone=" + phone + ", profileDesc=" + profileDesc + ", birthDate=" + birthDate + ", birthPlace=" + birthPlace + ", countryName=" + countryName + ", skill=" + skill + '}';
     }
+
+ 
 }

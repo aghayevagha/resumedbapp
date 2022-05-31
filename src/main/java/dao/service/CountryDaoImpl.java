@@ -22,7 +22,7 @@ public class CountryDaoImpl extends AbstractDAO implements CountryDaoInter {
     public List<Country> getAllCountries() {
         try(Connection c=connect();){
             Statement statement=c.createStatement();
-            statement.execute("select name from resumeapp.country;");
+            statement.execute("select * from resumeapp.country;");
             ResultSet rs=statement.getResultSet();
             while(rs.next()){
             countries.add(getCountry(rs));
